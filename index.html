@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html ng-app="RoamerApp">
+    <head ng-controller="GlobalController">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="Cache-control" content="max-age=2592000">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <title>Roamer AI eSIM - Low-cost data and voice roaming</title>
+        <meta name="description" content="A SIM that allows to keep your existing mobile number and works in over 100 countries.">
+        <meta name="keywords" content="Roaming, SIM, Roamer, RoamerSIM, Roamer SIM, keep Mobile number">
+        <meta property="og:title" content="Roamer SIM - Low-cost data and voice roaming">
+        <meta property="og:description" content="A SIM that allows to keep your existing mobile number and works in over 100 countries.">
+        <meta property="og:site_name" content="roamersim.com">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://roamersim.com/">
+        <meta property="og:image" content="https://roamersim.com/img/share-logo.png">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <base href="/"/>
+        <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    </head>
+
+    <body ng-controller="GlobalController" ng-class="{overflowed:disableScroll, ltr: localeData.direction === 'ltr', rtl: localeData.direction === 'rtl'}">
+
+        <div ng-class="{overflowed:disableScroll}" id="scrollable">
+
+            <div id="header" ng-if="!hideForApp" style="display: none;" ng-class="{transparent: transparentHeader, default: !transparentHeader}">
+                <div class="container header">
+    <div class="hide-xs hide-s hide-m">
+        <div class="grid-l-4 grid-xl-4">
+            <div ng-hide="disableNavigation">
+                <a ng-show="transparentHeader" ng-click="goTo('/')" class="logo middle" style="font-size: 24px; font-weight: bold; color: #fff; text-decoration: none;">Roamer AI eSIM</a>
+                <a ng-show="!transparentHeader" ng-click="goTo('/')" class="logo middle" style="font-size: 24px; font-weight: bold; color: #468ee5; text-decoration: none;">Roamer AI eSIM</a>
+            </div>
+            <div ng-if="disableNavigation">
+                <a ng-show="transparentHeader" class="logo middle" style="font-size: 24px; font-weight: bold; color: #fff; text-decoration: none;">Roamer AI eSIM</a>
+                <a ng-show="!transparentHeader" class="logo middle" style="font-size: 24px; font-weight: bold; color: #468ee5; text-decoration: none;">Roamer AI eSIM</a>
+            </div>
+        </div>
+        <div class="grid-l-7 grid-xl-7">
+            <ul class="navigation float-right" ng-hide="hideNavigation || disableNavigation">
+                <li>
+                    <a ng-if="coverageIsSet" ng-click="scrollToCoverage();" class="top" ng-bind="translate('link.coverage')"></a>
+                </li>
+                <!--<li>-->
+                    <!--<a ng-if="orderIsSet" ng-click="scrollToOrder();" class="top" ng-bind="translate('link.order')"></a>-->
+                <!--</li>-->
+                <li>
+                    <a ng-href="https://help.roamersim.com/{{locale}}" class="top" target="_blank" ng-bind="translate('link.help')"></a>
+                </li>
+            </ul>
+        </div>
+        <div class="grid-l-1 grid-xl-1 text-right">
+            <div class="desktop locale-switcher">
+                <a class="current-locale text-right top" ng-click="toggleLocaleSelect()">
+                    <span ng-bind="localeData.name"></span>
+                    <i ng-show="transparentHeader" class="sprite" ng-class="{'icon-orange-arrow-down': !showLocaleSelect, 'icon-orange-arrow-up': showLocaleSelect}"></i>
+                    <i ng-show="!transparentHeader" class="sprite" ng-class="{'icon-collapse': !showLocaleSelect, 'icon-collapse-up': showLocaleSelect}"></i>
+                </a>
+                <div class="locales-container" ng-show="showLocaleSelect">
+                    <ul class="locales text-left">
+                        <li ng-repeat="locale in locales" ng-click="$parent.changeLocale(locale);$parent.toggleLocaleSelect();" ng-class="{locale:true, active:$parent.isActiveLocale(locale.short)}">
+                            <span class="locale-name" ng-bind="locale.name"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hide-l hide-xl">
+        <div class="grid-xs-3 grid-s-2 grid-m-2">
+            <a ng-click="toggleNavigationSelect()" class="top" ng-hide="disableNavigation">
+                <i ng-show="transparentHeader" class="sprite icon-hamburger"></i>
+                <i ng-show="!transparentHeader" class="sprite icon-hamburger-blue"></i>
+                <span ng-bind="translate('link.menu')"></span>
+            </a>
+            <div class="mobile-navigation-container" ng-show="showNavigationSelect">
+                <div class="container">
+                    <div class="grid-xs-2 grid-s-2 grid-m-2">
+                        <a class="mobile-navigation-container-close" ng-click="toggleNavigationSelect()"><i class="sprite icon-close-white"></i></a>
+                    </div>
+                    <div class="grid-xs-8 grid-s-8 grid-m-8 text-center">
+                        <div ng-hide="disableNavigation">
+                            <a ng-click="goTo('/');toggleNavigationSelect();" class="logo middle" style="font-size: 18px; font-weight: bold; color: #fff; text-decoration: none;">Roamer AI eSIM</a>
+                        </div>
+                        <div ng-if="disableNavigation">
+                            <a ng-click="toggleNavigationSelect();" class="logo middle" style="font-size: 18px; font-weight: bold; color: #fff; text-decoration: none;">Roamer AI eSIM</a>
+                        </div>
+                    </div>
+                    <div class="grid-xs-2 grid-s-2 grid-m-2 text-right">
+                    </div>
+                </div>
+                <ul class="mobile-navigation">
+                    <li>
+                        <a ng-if="coverageIsSet" ng-click="scrollToCoverage();toggleNavigationSelect();" ng-bind="translate('link.coverage')"></a>
+                    </li>
+                    <!--<li>-->
+                        <!--<a ng-if="orderIsSet" ng-click="scrollToOrder();toggleNavigationSelect();" ng-bind="translate('link.order')"></a>-->
+                    <!--</li>-->
+                    <li>
+                        <a ng-href="https://help.roamersim.com/{{locale}}" ng-click="toggleNavigationSelect();" target="_blank" ng-bind="translate('link.help')"></a>
+                    </li>
+                    <li>
+                        <a ng-click="goTo('/terms');toggleNavigationSelect();" ng-bind="translate('link.tos')"></a>
+                    </li>
+                    <li>
+                        <a ng-click="goTo('/privacy');toggleNavigationSelect();" ng-bind="translate('link.privacy')"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="grid-xs-6 grid-s-8 grid-m-8 text-center">
+            <div ng-hide="disableNavigation">
+                <a ng-show="transparentHeader" ng-click="goTo('/')" class="logo middle" style="font-size: 18px; font-weight: bold; color: #fff; text-decoration: none;">Roamer AI eSIM</a>
+                <a ng-show="!transparentHeader" ng-click="goTo('/')" class="logo middle" style="font-size: 18px; font-weight: bold; color: #468ee5; text-decoration: none;">Roamer AI eSIM</a>
+            </div>
+            <div ng-if="disableNavigation">
+                <a ng-show="transparentHeader" class="logo middle" style="font-size: 18px; font-weight: bold; color: #fff; text-decoration: none;">Roamer AI eSIM</a>
+                <a ng-show="!transparentHeader" class="logo middle" style="font-size: 18px; font-weight: bold; color: #468ee5; text-decoration: none;">Roamer AI eSIM</a>
+            </div>
+        </div>
+        <div class="grid-xs-3 grid-s-2 grid-m-2 text-right overflowed">
+            <div class="mobile locale-switcher">
+                <a class="current-locale top" ng-click="toggleLocaleSelect(true)">
+                    <span ng-bind="localeData.name"></span>
+                    <i ng-show="transparentHeader" class="sprite" ng-class="{'icon-orange-arrow-down': !showLocaleSelect, 'icon-orange-arrow-up': showLocaleSelect}"></i>
+                    <i ng-show="!transparentHeader" class="sprite" ng-class="{'icon-collapse': !showLocaleSelect, 'icon-collapse-up': showLocaleSelect}"></i>
+                </a>
+                <div class="locales-container" ng-show="showLocaleSelect">
+                    <div class="container">
+                        <div class="grid-xs-2 grid-s-2 grid-m-2"></div>
+                        <div class="grid-xs-8 grid-s-8 grid-m-8 text-center">
+                            <div ng-hide="disableNavigation">
+                                <a ng-click="goTo('/');toggleLocaleSelect(true);" class="logo middle" style="font-size: 18px; font-weight: bold; color: #fff; text-decoration: none;">Roamer AI eSIM</a>
+                            </div>
+                            <div ng-if="disableNavigation">
+                                <a ng-click="toggleLocaleSelect(true);" class="logo middle" style="font-size: 18px; font-weight: bold; color: #fff; text-decoration: none;">Roamer AI eSIM</a>
+                            </div>
+                        </div>
+                        <div class="grid-xs-2 grid-s-2 grid-m-2 text-right">
+                            <a class="locale-container-close" ng-click="toggleLocaleSelect(true)"><i class="sprite icon-close-white"></i></a>
+                        </div>
+                    </div>
+                    <ul class="locales container text-left clear-each-xs-2 clear-each-s-3 clear-each-m-3">
+                        <li ng-repeat="locale in locales" class="grid-xs-6 grid-s-4 grid-m-4" ng-click="$parent.changeLocale(locale);$parent.toggleLocaleSelect(true);" ng-class="{locale:true, active:$parent.isActiveLocale(locale.short)}">
+                            <span class="locale-name" ng-bind="locale.name"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-show="!transparentHeader" class="grid-12">
+        <hr>
+    </div>
+</div>
+            </div>
+
+            <div id="slow-internet-connection" style="display: none;">
+                <div class="container">
+                    <div class="grid-12">
+                        <p>
+                        <span ng-bind-html="translate('message.slow.internet', '<a href=https://dev-min.roamersim.com>dev-min.roamersim.com</a>') | html"></span>
+                        <span><a onclick="var el = document.getElementById('slow-internet-connection'); el.parentNode.removeChild(el);return false;">×</a></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="content" ng-view>
+                <noscript>
+                    <div class="container">
+                        <div class="grid-12">
+                            <br><br><br>
+                            <h1>JavaScript is required!</h1>
+                            <hr>
+                            <p>Your browser does not support JavaScript or JavaScript has been turned off. This page will not work, unless JavaScript is enabled.</p>
+                        </div>
+                    </div>
+                </noscript>
+            </div>
+
+            <div id="footer" ng-if="!hideForApp" ng-class="{'on-load': onLoad}">
+                <div class="container">
+    <div class="grid-xs-12 grid-s-12 grid-m-8 grid-l-8 grid-xl-8 text-center-xs text-center-s text-left-m text-left-l text-left-xl">
+        <div class="column">
+            <div class="footer-logo">
+                <a ng-click="goTo('/')" class="logo"><i class="sprite icon-rsim-r-sim-footer"></i></a>
+            </div>
+            <div class="footer-copyright">
+                <p ng-bind="translate('copyright')"></p>
+                <p ng-bind-html="translate('from.latvia') | html"></p>
+            </div>
+            <div class="footer-copyright">
+                <br>
+                <p ng-bind-html="translate('contact.us') | html"></p>
+            </div>
+        </div>
+    </div>
+    <div class="grid-xs-12 grid-s-12 grid-m-4 grid-l-4 grid-xl-4 text-center-xs text-center-s text-right-m text-right-l text-right-xl" ng-hide="hideNavigation">
+        <div class="column">
+            <div class="footer-links">
+                <br>
+                <div>
+                    <a ng-href="https://help.roamersim.com/{{locale}}" target="_blank" ng-bind="translate('link.help')"></a>
+                </div>
+                <div>
+                    <a ng-click="goTo('/terms')" ng-bind="translate('link.tos')"></a>
+                </div>
+                <div>
+                    <a ng-click="goTo('/privacy')" ng-bind="translate('link.privacy')"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid-12">
+        <br>
+    </div>
+</div>
+            </div>
+        </div>
+
+        <script>var timestamp = '1769058250';</script>
+        <script src="/js/common.js?v=1769058250" async></script>
+        <link href="/css/common.css?v=1769058250" rel="stylesheet" type="text/css">
+        <link href="/css/sprites.css?v=1769058250" rel="stylesheet" type="text/css">
+        <link href="/css/sprites@2x.css?v=1769058250" rel="stylesheet" type="text/css">
+        <link href="/css/grid.css?v=1769058250" rel="stylesheet" type="text/css">
+
+    </body>
+</html>

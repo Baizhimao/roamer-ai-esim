@@ -1,0 +1,8 @@
+User-agent: *
+Disallow:
+Crawl-delay: 5
+Disallow: /lokalise-web-hook.php
+Disallow: /en/beta/subscribe
+Disallow: /ru/beta/subscribe
+Disallow: /*/beta/subscribe
+Sitemap: /sitemap.xml
